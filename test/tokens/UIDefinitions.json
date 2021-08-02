@@ -1,0 +1,17 @@
+{
+  "ipfsRequiredFields": [],
+
+  "ipfsOptionalFields": [],
+
+  "contractRequiredFields": ["name", "decimals"],
+
+  "contractOptionalFields": [],
+
+  "fileFields": [],
+
+  "dateFields": [],
+
+  "textFields": [],
+
+  "selectFields": {}
+}
