@@ -1,0 +1,54 @@
+{
+    "ipfsRequiredFields": [    ],
+  
+    "ipfsOptionalFields": [],
+  
+    "contractRequiredFields": [
+        "bottling",
+        "requestDate",
+        "bottlingDate",
+        "shipmentDate",
+        "product"
+    ],
+  
+    "contractOptionalFields": [],
+  
+    "fileFields": [],
+  
+    "dateFields": ["requestDate", "bottlingDate", "shipmentDate"],
+  
+    "textFields": [],
+  
+    "selectFields": {
+      "bottling": [
+        { "value": "Can500ml", "label": "Can - 500ml" },
+        { "value": "Can350ml", "label": "Can - 350ml" },
+        { "value": "Bottle1500ml", "label": "Bottle - 1500ml" },
+        { "value": "Bottle1000ml", "label": "Bottle - 1000ml" },
+        { "value": "Bottle850ml", "label": "Bottle - 850ml" },
+        { "value": "Bottle500ml", "label": "Bottle - 500ml" },
+        { "value": "Bottle300ml", "label": "Bottle - 300ml" }
+      ],
+
+      "product": 
+      [
+        { "value": "CocaCola", "label": "Coca Cola" },
+        { "value": "Fanta", "label": "Fanta" },
+        { "value": "Sprite", "label": "Sprite" }
+      ]
+    },
+  
+    "knownWalletSelectFields": [],
+  
+    "roleRegistrySelectFields": [],
+  
+    "subItemActions": [],
+  
+    "contractActions": [],
+  
+    "ipfsOptionalFieldsForMethod": {},
+    "ipfsRequiredFieldsForMethod": {},
+  
+    "listFields": []
+  }
+  
