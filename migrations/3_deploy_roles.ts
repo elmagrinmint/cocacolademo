@@ -5,7 +5,7 @@ import { CarrierRoleRegistryContract } from '../types/truffle-contracts/CarrierR
 import { ResellerRoleRegistryContract } from '../types/truffle-contracts/ResellerRoleRegistry';
 import { SupplierRoleRegistryContract } from '../types/truffle-contracts/SupplierRoleRegistry';
 
-
+import { GateKeeperContract, GateKeeperInstance } from '../types/truffle-contracts/GateKeeper';
 import { createMintAccounts, deployRoleRegistry, IMintUser } from './_helpers/authentication/accounts';
 import { grantPermission } from './_helpers/authentication/permissions';
 

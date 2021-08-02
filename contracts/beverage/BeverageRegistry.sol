@@ -11,11 +11,11 @@
 
 pragma solidity ^0.8.0;
 
-import '../_library//utility/upgrading/UpgradeableRegistry.sol';
+import '../_library//provenance/statemachine/StateMachineRegistry.sol';
 
 /**
  * @title Registry contract for the Beverages state machine
  */
-contract BeverageRegistry is UpgradeableRegistry {
-  constructor(address gatekeeper) UpgradeableRegistry(gatekeeper) {}
+contract BeverageRegistry is StateMachineRegistry {
+  constructor(address gatekeeper) StateMachineRegistry(gatekeeper) {}
 }

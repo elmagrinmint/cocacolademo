@@ -25,7 +25,7 @@ import '../_library//utility/conversions/Converter.sol';
  *
  * @title Beverage State machine implementation
  */
-contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContainer {
+contract Beverage is Converter, StateMachine, IpfsFieldContainer, FileFieldContainer {
   bytes32 public constant STATE_PURCHASE_REQUEST_RECEIVED = 'PURCHASE REQUEST RECEIVED';
   bytes32 public constant STATE_SUPPLIER_CHOSEN = 'SUPPLIER CHOSEN';
   bytes32 public constant STATE_COURIER_ASSIGNED = 'COURIER ASSIGNED';
@@ -45,8 +45,8 @@ contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContai
   uint256 private _param3;
    */
   uint256 public _requestDate;
-  bytes32 public _product; 
-  bytes32 public _bottling;
+  string public _product; 
+  string public _bottling;
   uint256 public _bottlingDate; 
 
   uint256 public _shipmentDate;
@@ -54,8 +54,8 @@ contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContai
   constructor(
     address gateKeeper,
     uint256 requestDate,
-    bytes32 product,
-    bytes32 bottling,
+    string memory product,
+    string memory bottling,
     uint256 bottlingDate,
     uint256 shipmentDate,
     string memory ipfsFieldContainerHash,
@@ -81,8 +81,8 @@ contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContai
    */
   function edit(
     uint256 requestDate,
-    bytes32 product,
-    bytes32 bottling,
+    string memory product,
+    string memory bottling,
     uint256 bottlingDate,
     uint256 shipmentDate,
     string memory ipfsFieldContainerHash
