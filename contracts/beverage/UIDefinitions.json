@@ -15,7 +15,7 @@
   
     "fileFields": [],
   
-    "dateFields": ["requestDate", "bottlingDate", "shipmentDate"],
+    "dateFields": ["requestDate", "bottlingDate", "shipmentDate", "co2ReceivedDate", "concentrateReceivedDate", "waterReceivedDate"],
   
     "textFields": [],
   
@@ -44,7 +44,7 @@
   
     "subItemActions": [],
   
-    "contractActions": [],
+    "contractActions": ["set_co2ReceivedDate","set_concentrateReceivedDate","set_waterReceivedDate"],
   
     "ipfsOptionalFieldsForMethod": {},
     "ipfsRequiredFieldsForMethod": {},
