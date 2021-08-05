@@ -12,9 +12,10 @@
 - cd ..
 - exec the below commands
 
-git clone https://github.com/<<your_user_name>>/<<your_repo_name>>.git temp <br/>
+````
+git clone https://github.com/<<your_user_name>>/<<your_repo_name>>.git temp 
 
-mv temp/.git code/.git <br/>
+mv temp/.git code/.git
 
 rm -rf temp
 
@@ -23,5 +24,5 @@ cd project
 git remote add origin https://github.com/<<your_user_name>>/<<your_repo_name>>.git
 
 git pull origin main
-
+````
 
