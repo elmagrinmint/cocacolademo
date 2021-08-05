@@ -171,9 +171,9 @@ contract Beverage is Converter, StateMachine, IpfsFieldContainer, FileFieldConta
     addNextStateForState(STATE_AWAITING_MATERIALS, STATE_AWAITING_MATERIALS);
     addNextStateForState(STATE_AWAITING_MATERIALS, STATE_PRODUCTION_FINALISED);
     addRoleForState(STATE_AWAITING_MATERIALS, ROLE_ADMIN);
-    if(abi.encodePacked(this.get_co2ReceivedDate()).length == 0){
+    //if(abi.encodePacked(this.get_co2ReceivedDate()).length == 0){
     addAllowedFunctionForState(STATE_AWAITING_MATERIALS, this.set_co2ReceivedDate.selector);
-    }
+    //}
    //     if(this.get_concentrateReceivedDate() ==  0){
     addAllowedFunctionForState(STATE_AWAITING_MATERIALS, this.set_concentrateReceivedDate.selector);
    //     }
