@@ -25,9 +25,11 @@ import '../_library//utility/conversions/Converter.sol';
  *
  * @title Beverage State machine implementation
  */
-contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContainer {
-  bytes32 public constant STATE_PURCHASE_REQUEST_RECEIVED = 'PURCHASE REQUEST RECEIVED';
-  bytes32 public constant STATE_SUPPLIER_CHOSEN = 'SUPPLIER CHOSEN';
+contract Beverage is Converter, StateMachine, IpfsFieldContainer, FileFieldContainer {
+  bytes32 public constant STATE_DEMAND_FORECAST_APPROVED = 'DEMAND FORECAST APPROVED';
+  bytes32 public constant STATE_RAW_MATERIALS_ORDERED = 'RAW MATERIALS ORDERED';
+  bytes32 public constant STATE_AWAITING_MATERIALS = 'AWAITING MATERIALS';
+  bytes32 public constant STATE_PRODUCTION_FINALISED = 'PRODUCTION FINALISED';
   bytes32 public constant STATE_COURIER_ASSIGNED = 'COURIER ASSIGNED';
   bytes32 public constant STATE_SHIPMENT_RECEIVED = 'SHIPMENT RECEIVED';
   bytes32 public constant STATE_SHIPMENT_REJECTED = 'SHIPMENT REJECTED';
@@ -45,17 +47,19 @@ contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContai
   uint256 private _param3;
    */
   uint256 public _requestDate;
-  bytes32 public _product; 
-  bytes32 public _bottling;
-  uint256 public _bottlingDate; 
-
+  string public _product; 
+  string public _bottling;
+  uint256 public _bottlingDate;
+  uint256 public _co2ReceivedDate;
+  uint256 public _concentrateReceivedDate;
+  uint256 public _waterReceivedDate;
   uint256 public _shipmentDate;
 
   constructor(
     address gateKeeper,
     uint256 requestDate,
-    bytes32 product,
-    bytes32 bottling,
+    string memory product,
+    string memory bottling,
     uint256 bottlingDate,
     uint256 shipmentDate,
     string memory ipfsFieldContainerHash,
@@ -81,18 +85,49 @@ contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContai
    */
   function edit(
     uint256 requestDate,
-    bytes32 product,
-    bytes32 bottling,
+    string memory product,
+    string memory bottling,
     uint256 bottlingDate,
     uint256 shipmentDate,
+    uint256 co2ReceivedDate,
+    uint256 concentrateReceivedDate,
+    uint256 waterReceivedDate,
     string memory ipfsFieldContainerHash
   ) public {
     _requestDate = requestDate;
     _product = product;
     _bottling = bottling;
     _bottlingDate = bottlingDate;
+    _co2ReceivedDate = co2ReceivedDate;
+    _concentrateReceivedDate = concentrateReceivedDate;
+    _waterReceivedDate = waterReceivedDate;
     _ipfsFieldContainerHash = ipfsFieldContainerHash;
   }
+
+  function set_co2ReceivedDate(uint256 co2ReceivedDate) public{
+     _co2ReceivedDate = co2ReceivedDate;
+  }
+
+  function get_co2ReceivedDate() public returns (uint256) {
+    return _co2ReceivedDate;
+  }
+
+  function set_concentrateReceivedDate(uint256 concentrateReceivedDate) public{
+     _concentrateReceivedDate = concentrateReceivedDate;
+  }
+
+  function get_concentrateReceivedDate() public returns (uint256) {
+    return _concentrateReceivedDate;
+  }
+  
+  function set_waterReceivedDate(uint256 waterReceivedDate) public{
+     _waterReceivedDate = waterReceivedDate;
+  }
+
+  function get_waterReceivedDate() public returns (uint256) {
+    return _waterReceivedDate;
+  }
+
 
   /**
    * @notice Returns all the roles for this contract
@@ -102,34 +137,61 @@ contract Generic is Converter, StateMachine, IpfsFieldContainer, FileFieldContai
     return _roles;
   }
 
+/*contract Beverage is Converter, StateMachine, IpfsFieldContainer, FileFieldContainer {
+  bytes32 public constant STATE_DEMAND_FORECAST_APPROVED = 'DEMAND FORECAST APPROVED';
+  bytes32 public constant STATE_RAW_MATERIALS_ORDERED = 'RAW MATERIALS ORDERED';
+  bytes32 public constant STATE_AWAITING_MATERIALS = 'AWAITING MATERIALS';
+  bytes32 public constant STATE_PRODUCTION_FINALISED = 'PRODUCTION FINALISED';
+  bytes32 public constant STATE_COURIER_ASSIGNED = 'COURIER ASSIGNED';
+  bytes32 public constant STATE_SHIPMENT_RECEIVED = 'SHIPMENT RECEIVED';
+  bytes32 public constant STATE_SHIPMENT_REJECTED = 'SHIPMENT REJECTED';*/
 
   function setupStateMachine() internal override {
     //create all states
-    createState(STATE_PURCHASE_REQUEST_RECEIVED);
-    createState(STATE_SUPPLIER_CHOSEN);
+    createState(STATE_DEMAND_FORECAST_APPROVED);
+    createState(STATE_RAW_MATERIALS_ORDERED);
+    createState(STATE_AWAITING_MATERIALS);
+    createState(STATE_PRODUCTION_FINALISED);
     createState(STATE_COURIER_ASSIGNED);
     createState(STATE_SHIPMENT_RECEIVED);
     createState(STATE_SHIPMENT_REJECTED);
 
     // add properties
-    // STATE_ONE
-    addNextStateForState(STATE_PURCHASE_REQUEST_RECEIVED, STATE_SUPPLIER_CHOSEN);
-    addRoleForState(STATE_PURCHASE_REQUEST_RECEIVED, ROLE_ADMIN);
+    // STATE_DEMAND_FORECAST_APPROVED
+    addNextStateForState(STATE_DEMAND_FORECAST_APPROVED, STATE_RAW_MATERIALS_ORDERED);
+    addRoleForState(STATE_DEMAND_FORECAST_APPROVED, ROLE_ADMIN);
 
-    // STATE_TWO
-    addNextStateForState(STATE_SUPPLIER_CHOSEN, STATE_COURIER_ASSIGNED);
-    addRoleForState(STATE_SUPPLIER_CHOSEN, ROLE_ADMIN);
-    addRoleForState(STATE_COURIER_ASSIGNED, ROLE_SUPPLIER);
+    // STATE_RAW_MATERIALS_ORDERED
+    addNextStateForState(STATE_RAW_MATERIALS_ORDERED, STATE_AWAITING_MATERIALS);
+    addRoleForState(STATE_RAW_MATERIALS_ORDERED, ROLE_ADMIN);
+    addRoleForState(STATE_RAW_MATERIALS_ORDERED, ROLE_SUPPLIER);
 
 
-    // STATE_THREE
-    addNextStateForState(STATE_COURIER_ASSIGNED, STATE_SHIPMENT_RECEIVED);
+    // STATE_AWAITING_MATERIALS
+    addNextStateForState(STATE_AWAITING_MATERIALS, STATE_AWAITING_MATERIALS);
+    addNextStateForState(STATE_AWAITING_MATERIALS, STATE_PRODUCTION_FINALISED);
+    addRoleForState(STATE_AWAITING_MATERIALS, ROLE_ADMIN);
+    //if(abi.encodePacked(this.get_co2ReceivedDate()).length == 0){
+    addAllowedFunctionForState(STATE_AWAITING_MATERIALS, this.set_co2ReceivedDate.selector);
+    //}
+   //     if(this.get_concentrateReceivedDate() ==  0){
+    addAllowedFunctionForState(STATE_AWAITING_MATERIALS, this.set_concentrateReceivedDate.selector);
+   //     }
+        //if(this.get_waterReceivedDate() ==  0){
+    addAllowedFunctionForState(STATE_AWAITING_MATERIALS, this.set_waterReceivedDate.selector);
+    //    }
+
+    //STATE_PRODUCTION_FINALISED
+    addNextStateForState(STATE_PRODUCTION_FINALISED, STATE_COURIER_ASSIGNED);
+    addRoleForState(STATE_PRODUCTION_FINALISED, ROLE_ADMIN);
+
+
+    // STATE_COURIER_ASSIGNED
+    addNextStateForState(STATE_COURIER_ASSIGNED,STATE_SHIPMENT_RECEIVED);
+    addNextStateForState(STATE_COURIER_ASSIGNED,STATE_SHIPMENT_REJECTED);
     addRoleForState(STATE_COURIER_ASSIGNED, ROLE_ADMIN);
     addRoleForState(STATE_COURIER_ASSIGNED, ROLE_RESELLER);
 
-    // STATE_FOUR
-    addNextStateForState(STATE_COURIER_ASSIGNED, STATE_SHIPMENT_REJECTED);
-
-    setInitialState(STATE_PURCHASE_REQUEST_RECEIVED);
+    setInitialState(STATE_DEMAND_FORECAST_APPROVED);
   }
 }
