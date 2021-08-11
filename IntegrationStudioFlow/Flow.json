@@ -1,0 +1,259 @@
+[
+    {
+        "id": "3f39aea5.fc2e42",
+        "type": "tab",
+        "label": "SAP Integration",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "458556f3.6845b8",
+        "type": "run_query",
+        "z": "3f39aea5.fc2e42",
+        "mydb": "",
+        "name": "runquery1",
+        "x": 310,
+        "y": 380,
+        "wires": [
+            [
+                "6368a75d.da37a8"
+            ]
+        ]
+    },
+    {
+        "id": "d8214915.314988",
+        "type": "cronplus",
+        "z": "3f39aea5.fc2e42",
+        "name": "",
+        "outputField": "payload",
+        "timeZone": "",
+        "persistDynamic": false,
+        "commandResponseMsgOutput": "output1",
+        "outputs": 1,
+        "options": [
+            {
+                "name": "schedule1",
+                "topic": "schedule1",
+                "payloadType": "default",
+                "payload": "",
+                "expressionType": "cron",
+                "expression": "0 * * * * * *",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 130,
+        "y": 280,
+        "wires": [
+            [
+                "458556f3.6845b8"
+            ]
+        ]
+    },
+    {
+        "id": "8338bb72.ce2c98",
+        "type": "http in",
+        "z": "3f39aea5.fc2e42",
+        "name": "",
+        "url": "",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 360,
+        "wires": [
+            [
+                "458556f3.6845b8"
+            ]
+        ]
+    },
+    {
+        "id": "6368a75d.da37a8",
+        "type": "middleware",
+        "z": "3f39aea5.fc2e42",
+        "name": "",
+        "openApiUrl": "http://mint-webserver.copper-cchellenic.svc.cluster.local/dapi/swagger/swagger.json",
+        "api": "authentication",
+        "operation": "postAuthenticationUsernamepassword",
+        "operationData": {
+            "name": "Authenticate via username/password"
+        },
+        "errorHandling": "",
+        "parameters": {
+            "body body": {
+                "name": "body",
+                "in": "body",
+                "value": "{\"username\":\"copper-cchellenic\",\"password\":\"$2a$08$MFgNcnoajN3GxHKuE18lWubg9qeaUNlwH/EpR6vLATRcuA91ErQyu\"}",
+                "isActive": true,
+                "inputType": "json"
+            }
+        },
+        "contentType": "application/json",
+        "outputs": 1,
+        "x": 630,
+        "y": 400,
+        "wires": [
+            [
+                "b5b074a6.0c3938"
+            ]
+        ]
+    },
+    {
+        "id": "b5b074a6.0c3938",
+        "type": "middleware",
+        "z": "3f39aea5.fc2e42",
+        "name": "",
+        "openApiUrl": "http://mint-webserver.copper-cchellenic.svc.cluster.local/dapi/swagger/swagger.json",
+        "api": "beveragefactory",
+        "operation": "getBeveragefactoryCreateUuid",
+        "operationData": {
+            "name": "The transaction result of POST /beveragefactory/create/{uuid}"
+        },
+        "errorHandling": "",
+        "parameters": {
+            "path uuid": {
+                "name": "uuid",
+                "in": "path",
+                "required": true,
+                "value": "",
+                "isActive": true,
+                "inputType": "str"
+            },
+            "query debug": {
+                "name": "debug",
+                "in": "query",
+                "value": "true",
+                "isActive": false,
+                "inputType": "bool"
+            }
+        },
+        "contentType": "application/json",
+        "outputs": 1,
+        "x": 630,
+        "y": 560,
+        "wires": [
+            [
+                "712663f5.44178c"
+            ]
+        ]
+    },
+    {
+        "id": "712663f5.44178c",
+        "type": "switch",
+        "z": "3f39aea5.fc2e42",
+        "name": "Transaction Mined?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "hask",
+                "v": "receipt",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1140,
+        "y": 440,
+        "wires": [
+            [
+                "f08b120d.997f1",
+                "96ecee72.321fd"
+            ],
+            [
+                "e920b6f2.29bc48",
+                "60a28253.5f85dc",
+                "df2e5cd3.69fda"
+            ]
+        ]
+    },
+    {
+        "id": "df2e5cd3.69fda",
+        "type": "e-mail",
+        "z": "3f39aea5.fc2e42",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "",
+        "x": 1610,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "96ecee72.321fd",
+        "type": "e-mail",
+        "z": "3f39aea5.fc2e42",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "",
+        "x": 1390,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "60a28253.5f85dc",
+        "type": "debug",
+        "z": "3f39aea5.fc2e42",
+        "name": "Transaction failed",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1600,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "f08b120d.997f1",
+        "type": "debug",
+        "z": "3f39aea5.fc2e42",
+        "name": "Test output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1410,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "e920b6f2.29bc48",
+        "type": "delay",
+        "z": "3f39aea5.fc2e42",
+        "name": "Wait a bit",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1170,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    }
+]
